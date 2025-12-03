@@ -1,12 +1,32 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { HelloService } from './hello';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    NgIf,
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
-export class App {
-  protected readonly title = signal('frontend');
+export class AppComponent implements OnInit {
+  message = 'Warte auf Backend...';
+  error = '';
+
+  constructor(private helloService: HelloService) {}
+
+  ngOnInit(): void {
+    this.helloService.getHello().subscribe({
+      next: (text) => {
+        this.message = text;
+      },
+      error: (err) => {
+        this.error = 'Fehler beim Laden vom Backend.';
+      }
+    });
+  }
 }
