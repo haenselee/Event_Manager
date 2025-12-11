@@ -1,5 +1,7 @@
-package com.example.dipl;
+package com.example.dipl.chat;
 
+import com.example.dipl.user.User;
+import com.example.dipl.event.Event;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

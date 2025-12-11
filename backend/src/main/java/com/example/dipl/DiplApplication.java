@@ -1,5 +1,8 @@
 package com.example.dipl;
 
+import com.example.dipl.user.Role;
+import com.example.dipl.user.User;
+import com.example.dipl.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +18,6 @@ public class DiplApplication {
     @Bean
     public CommandLineRunner initUsers(UserRepository userRepository) {
         return args -> {
-            // Admin sicherstellen
             if (userRepository.findByUsername("admin").isEmpty()) {
                 userRepository.save(new User("admin", "admin123", Role.ADMIN));
             }

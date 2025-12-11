@@ -1,6 +1,7 @@
-package com.example.dipl;
+package com.example.dipl.event;
 
-import org.springframework.http.ResponseEntity;
+import com.example.dipl.chat.EventMessageRepository;
+import com.example.dipl.register.RegistrationRepository;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 

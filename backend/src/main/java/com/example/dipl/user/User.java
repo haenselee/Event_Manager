@@ -1,9 +1,9 @@
-package com.example.dipl;
+package com.example.dipl.user;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users") // "user" ist in manchen DBs ein reserviertes Wort
+@Table(name = "users")
 public class User {
 
     @Id
@@ -14,7 +14,7 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    private String password; // für Schulprojekt okay; in echt: BCrypt-Hash
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

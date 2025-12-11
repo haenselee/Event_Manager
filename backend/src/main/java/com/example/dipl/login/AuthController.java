@@ -1,5 +1,9 @@
-package com.example.dipl;
+package com.example.dipl.login;
 
+import com.example.dipl.register.RegisterRequest;
+import com.example.dipl.user.Role;
+import com.example.dipl.user.User;
+import com.example.dipl.user.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,7 +35,7 @@ public class AuthController {
             throw new RuntimeException("Benutzername bereits vergeben");
         });
 
-        // Default: wenn Rolle nicht gesetzt ist, machen wir einen Schüler daraus
+        // wenn rolle nicht gesetzt dann default STUDENT
         Role role = request.getRole() != null ? request.getRole() : Role.STUDENT;
 
         User user = new User(request.getUsername(), request.getPassword(), role);

@@ -1,5 +1,7 @@
-package com.example.dipl;
+package com.example.dipl.login;
 
+
+import com.example.dipl.user.Role;
 
 public class LoginResponse {
     private Long id;

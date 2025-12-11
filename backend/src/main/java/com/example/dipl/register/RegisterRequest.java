@@ -1,5 +1,7 @@
-package com.example.dipl;
+package com.example.dipl.register;
 
+
+import com.example.dipl.user.Role;
 
 public class RegisterRequest {
     private String username;

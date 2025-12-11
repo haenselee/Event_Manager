@@ -1,4 +1,4 @@
-package com.example.dipl;
+package com.example.dipl.user;
 
 public enum Role {
     ADMIN,

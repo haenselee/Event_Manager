@@ -1,4 +1,4 @@
-package com.example.dipl;
+package com.example.dipl.login;
 
 public class LoginRequest {
     private String username;

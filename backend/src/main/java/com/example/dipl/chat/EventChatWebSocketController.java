@@ -1,5 +1,9 @@
-package com.example.dipl;
+package com.example.dipl.chat;
 
+import com.example.dipl.user.User;
+import com.example.dipl.user.UserRepository;
+import com.example.dipl.event.Event;
+import com.example.dipl.event.EventRepository;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -49,7 +53,6 @@ public class EventChatWebSocketController {
 
         EventMessage saved = messageRepo.save(msg);
 
-        // Broadcast an alle, die dieses Event abonniert haben
         messagingTemplate.convertAndSend("/topic/chat/" + eventId, saved);
     }
 }

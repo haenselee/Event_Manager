@@ -37,12 +37,10 @@ export class RegistrationService {
     return this.http.delete<void>(`${this.apiUrl}?studentId=${studentId}&eventId=${eventId}`);
   }
 
-  // ⬇️ NEU: alle Registrierungen für ein Event (für Schüler-Übersicht & Lehrer-Seite)
   getByEvent(eventId: number): Observable<Registration[]> {
     return this.http.get<Registration[]>(`${this.apiUrl}/by-event?eventId=${eventId}`);
   }
 
-  // ⬇️ NEU: Zahlung auslösen
   pay(studentId: number, eventId: number): Observable<Registration> {
     return this.http.post<Registration>(`${this.apiUrl}/pay?studentId=${studentId}&eventId=${eventId}`, {});
   }

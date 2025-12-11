@@ -1,4 +1,4 @@
-package com.example.dipl;
+package com.example.dipl.chat;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

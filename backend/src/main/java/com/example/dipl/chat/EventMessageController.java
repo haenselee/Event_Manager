@@ -1,5 +1,9 @@
-package com.example.dipl;
+package com.example.dipl.chat;
 
+import com.example.dipl.event.EventRepository;
+import com.example.dipl.user.User;
+import com.example.dipl.user.UserRepository;
+import com.example.dipl.event.Event;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

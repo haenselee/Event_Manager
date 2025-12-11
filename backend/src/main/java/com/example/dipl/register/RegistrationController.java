@@ -1,5 +1,9 @@
-package com.example.dipl;
+package com.example.dipl.register;
 
+import com.example.dipl.user.User;
+import com.example.dipl.user.UserRepository;
+import com.example.dipl.event.Event;
+import com.example.dipl.event.EventRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +28,11 @@ public class RegistrationController {
         this.eventRepo = eventRepo;
     }
 
-    // Anmeldungen eines Schülers (für "Meine Anmeldungen" & Startseite)
     @GetMapping("/me")
     public List<Registration> myRegistrations(@RequestParam Long studentId) {
         return regRepo.findByStudent_Id(studentId);
     }
 
-    // Anmelden zu einem Event
     @PostMapping
     public Registration register(@RequestParam Long studentId, @RequestParam Long eventId) {
 
@@ -52,7 +54,6 @@ public class RegistrationController {
         return regRepo.save(reg);
     }
 
-    // Abmelden von einem Event
     @DeleteMapping
     public ResponseEntity<Void> unregister(@RequestParam Long studentId, @RequestParam Long eventId) {
         List<Registration> regs = regRepo.findByStudent_IdAndEvent_Id(studentId, eventId);
@@ -63,13 +64,11 @@ public class RegistrationController {
         return ResponseEntity.noContent().build();
     }
 
-    // Alle Anmeldungen zu einem Event (für Lehrer-/Admin-Übersicht)
     @GetMapping("/by-event")
     public List<Registration> byEvent(@RequestParam Long eventId) {
         return regRepo.findByEvent_Id(eventId);
     }
 
-    // Zahlung markieren (Schüler klickt "Jetzt bezahlen")
     @PostMapping("/pay")
     public Registration markPaid(@RequestParam Long studentId, @RequestParam Long eventId) {
         Registration reg = regRepo.findFirstByStudent_IdAndEvent_Id(studentId, eventId);

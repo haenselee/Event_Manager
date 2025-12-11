@@ -1,5 +1,5 @@
 // Event.java
-package com.example.dipl;
+package com.example.dipl.event;
 
 import jakarta.persistence.*;
 
