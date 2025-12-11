@@ -9,10 +9,12 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class EventController {
 
+    private final EventMessageRepository messageRepo;
     private final EventRepository eventRepo;
     private final RegistrationRepository regRepo;
 
-    public EventController(EventRepository repo, RegistrationRepository regRepo) {
+    public EventController(EventMessageRepository messageRepo, EventRepository repo, RegistrationRepository regRepo) {
+        this.messageRepo = messageRepo;
         this.eventRepo = repo;
         this.regRepo = regRepo;
     }
@@ -33,9 +35,9 @@ public class EventController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllEvents() {
+    public void deleteAllEvents() {
         regRepo.deleteAll();
+        messageRepo.deleteAll();
         eventRepo.deleteAll();
-        return ResponseEntity.noContent().build();
     }
 }

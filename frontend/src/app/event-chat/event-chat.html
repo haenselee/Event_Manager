@@ -6,7 +6,8 @@
         <p>{{ event.title }}</p>
       </div>
       <div class="hint">
-        <span>Lehrer &amp; Schüler können hier schreiben.</span>
+        <span *ngIf="connecting">Verbindung wird aufgebaut…</span>
+        <span *ngIf="!connecting">Lehrer &amp; Schüler können hier schreiben.</span>
       </div>
     </header>
 
@@ -21,7 +22,7 @@
           [ngClass]="{ own: isOwn(m) }"
         >
           <div class="meta">
-            <span class="author">{{ m.author.username}}<-></span>
+            <span class="author">{{ m.author.username }} ({{ m.author.role }})</span>
             <span class="time">{{ m.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
           </div>
           <div class="content">
