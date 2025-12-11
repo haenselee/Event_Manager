@@ -1,0 +1,84 @@
+.admin-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.page-title {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  color: #4c1d95;
+}
+
+.admin-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+h3 {
+  margin: 0 0 0.8rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+input, select {
+  width: 100%;
+  padding: 0.45rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+}
+
+.primary-btn {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.primary-btn:hover {
+  background: #6d28d9;
+}
+
+.error {
+  color: #b91c1c;
+}
+
+.success {
+  color: #166534;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th {
+  text-align: left;
+  background: #f3e8ff;
+  padding: 0.5rem;
+  color: #4c1d95;
+}
+
+.user-table td {
+  padding: 0.45rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+@media (max-width: 700px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}

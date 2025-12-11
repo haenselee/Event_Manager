@@ -1,32 +1,82 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { HelloService } from './hello';
-import { NgIf } from '@angular/common';
+import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
+import { NgIf, NgClass } from '@angular/common';
+import { LoginComponent } from './login/login';
+import { AdminComponent } from './admin/admin';
+import { StudentEventsComponent } from './student-events/student-events';
+import { MyRegistrationsComponent } from './my-registrations/my-registrations';
+import { CalendarComponent } from './calendar/calendar';
+import { EventOverviewComponent } from './event-overview/event-overview';
+import { EventChatComponent } from './event-chat/event-chat';
+import { AuthService } from './auth';
+import { AuthUser } from './auth-user';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet,
     NgIf,
+    NgClass,
+    LoginComponent,
+    AdminComponent,
+    StudentEventsComponent,
+    MyRegistrationsComponent,
+    CalendarComponent,
+    EventOverviewComponent,
+    EventChatComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class AppComponent implements OnInit {
-  message = 'Warte auf Backend...';
-  error = '';
+export class AppComponent {
 
-  constructor(private helloService: HelloService) {}
+  activePage: 'events' | 'calendar' | 'my-registrations' | 'admin' | 'event-info' | 'event-chat'
+    = 'events';
 
-  ngOnInit(): void {
-    this.helloService.getHello().subscribe({
-      next: (text) => {
-        this.message = text;
-      },
-      error: (err) => {
-        this.error = 'Fehler beim Laden vom Backend.';
-      }
+  selectedChatEvent: { id: number; title: string } | null = null;
+
+  constructor(
+    public auth: AuthService,
+    private zone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  setPage(page: 'events' | 'calendar' | 'my-registrations' | 'admin' | 'event-info' | 'event-chat') {
+    this.zone.run(() => {
+      this.activePage = page;
+      this.cdr.detectChanges();
     });
+  }
+
+  onOpenChat(ev: { id: number; title: string }) {
+    this.zone.run(() => {
+      this.selectedChatEvent = ev;
+      this.activePage = 'event-chat';
+      this.cdr.detectChanges();
+    });
+  }
+
+  logout(): void {
+    this.zone.run(() => {
+      this.auth.logout();
+      this.activePage = 'events';
+      this.selectedChatEvent = null;
+      this.cdr.detectChanges();
+    });
+  }
+
+  get currentUser(): AuthUser | null {
+    return this.auth.currentUser;
+  }
+
+  get isTeacher(): boolean {
+    return this.auth.isTeacher;
+  }
+
+  get isStudent(): boolean {
+    return this.auth.isStudent;
+  }
+
+  get isAdmin(): boolean {
+    return this.auth.isAdmin;
   }
 }

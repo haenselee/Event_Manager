@@ -1,0 +1,117 @@
+<div class="start-wrapper">
+
+  <!-- ====== Lehrer/Admin: Create-Event-Seite ====== -->
+  <section *ngIf="auth.isTeacher || auth.isAdmin" class="teacher-card">
+    <header class="teacher-header">
+      <div>
+        <h2>Neues Event anlegen</h2>
+        <p>Erstelle Klassen-Events. Schüler können sich danach direkt anmelden.</p>
+      </div>
+      <button type="button" class="danger-btn" (click)="deleteAllEvents()">
+        Alle Events löschen
+      </button>
+    </header>
+
+    <div class="teacher-grid">
+      <div class="field">
+        <label>Titel</label>
+        <input
+          [(ngModel)]="newTitle"
+          placeholder="z. B. Wien-Exkursion"
+        />
+      </div>
+
+      <div class="field">
+        <label>Datum</label>
+        <input [(ngModel)]="newDate" type="date" />
+      </div>
+
+      <div class="field">
+        <label>Ort</label>
+        <input
+          [(ngModel)]="newLocation"
+          placeholder="z. B. Technisches Museum"
+        />
+      </div>
+
+      <div class="field">
+        <label>Preis (EUR)</label>
+        <input [(ngModel)]="newPrice" type="number" min="0" step="0.5" />
+      </div>
+
+      <div class="field field-full">
+        <label>Beschreibung</label>
+        <textarea
+          [(ngModel)]="newDescription"
+          rows="3"
+          placeholder="Kurze Info zum Ablauf, Treffpunkt, etc."
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="teacher-actions">
+      <button type="button" (click)="createEvent()">Event erstellen</button>
+    </div>
+
+    <p *ngIf="createError" class="error-text">{{ createError }}</p>
+    <p *ngIf="infoMessage" class="info-text">{{ infoMessage }}</p>
+  </section>
+
+  <!-- ====== Schüler-Startseite: nur Event-Liste ====== -->
+  <section *ngIf="auth.isStudent" class="events-card">
+    <header class="events-card-header">
+      <h3>Verfügbare Klassen-Events</h3>
+      <span *ngIf="loading" class="chip">Lade…</span>
+      <span *ngIf="!loading && events.length > 0" class="chip">
+        {{ events.length }} Event{{ events.length === 1 ? '' : 's' }}
+      </span>
+    </header>
+
+    <p *ngIf="error" class="error-text">{{ error }}</p>
+    <p *ngIf="regError && !error" class="warning-text">{{ regError }}</p>
+
+    <div *ngIf="!loading && !error && events.length === 0" class="empty-state">
+      <p>Es sind derzeit keine Events angelegt.</p>
+      <p>Bitte deinen Klassenvorstand, ein neues Event zu erstellen.</p>
+    </div>
+
+    <div *ngIf="!loading && !error && events.length > 0" class="events-list">
+      <article *ngFor="let e of events" class="event-card">
+        <div class="event-main">
+          <h4>{{ e.title }}</h4>
+          <div class="event-meta">
+            <span class="badge">{{ e.date | date:'dd.MM.yyyy' }}</span>
+            <span class="badge" *ngIf="e.location">📍 {{ e.location }}</span>
+            <span class="badge" *ngIf="e.price && e.price > 0">
+              💶 {{ e.price | currency:'EUR':'symbol':'1.2-2' }}
+            </span>
+            <span class="badge" *ngIf="!e.price || e.price === 0">
+              Kostenlos
+            </span>
+          </div>
+          <p class="event-description" *ngIf="e.description">
+            {{ e.description }}
+          </p>
+        </div>
+
+        <div class="event-actions">
+          <button
+            type="button"
+            (click)="toggleRegistration(e.id)"
+            [class.secondary]="isRegistered(e.id!)"
+          >
+            {{ isRegistered(e.id!) ? 'Abmelden' : 'Anmelden' }}
+          </button>
+
+          <button
+            type="button"
+            class="chat-btn"
+            (click)="openChat.emit({ id: e.id!, title: e.title })"
+          >
+            Chat-Forum
+          </button>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

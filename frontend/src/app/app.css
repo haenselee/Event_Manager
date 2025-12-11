@@ -1,0 +1,223 @@
+/* ======== App Layout ======== */
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f3ff;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at top left, #ede9fe 0, #f5f3ff 45%, #f9fafb 100%);
+}
+
+.main {
+  flex: 1;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+.page-section {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ======== Topbar / Navbar ======== */
+
+.topbar {
+  background: linear-gradient(90deg, #8b5cf6, #a855f7);
+  padding: 0.7rem 1.8rem;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-icon {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 14px;
+  padding: 0.55rem 0.65rem;
+  font-size: 1.4rem;
+  color: #f9fafb;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fdfbff;
+}
+
+.brand-subtitle {
+  font-size: 0.8rem;
+  color: rgba(249, 250, 251, 0.85);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-link {
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  color: #fdfbff;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  background: #f9fafb;
+  color: #7c3aed;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.25);
+}
+
+/* ======== User / Logout ======== */
+
+.user-area {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.user-name {
+  color: #fefefe;
+  font-size: 0.9rem;
+}
+
+.logout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: none;
+  outline: none;
+  border-radius: 999px;
+  padding: 0.38rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fefefe;
+  color: #7c3aed;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.3);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.logout-icon {
+  font-size: 0.9rem;
+}
+
+.logout-btn:hover {
+  background: #ede9fe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.35);
+}
+
+/* ======== Login Seite ======== */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top left, #ede9fe, #f9fafb);
+}
+
+.login-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 1.8rem 2rem;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.25);
+  max-width: 440px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.login-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.login-icon {
+  background: #f5f3ff;
+  border-radius: 18px;
+  padding: 0.75rem 0.85rem;
+  font-size: 1.6rem;
+}
+
+.login-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #4c1d95;
+}
+
+.login-header p {
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
+  color: #6b21a8;
+}
+
+.login-body {
+  margin-top: 0.5rem;
+}
+
+/* Kleine responsiven Anpassungen */
+
+@media (max-width: 768px) {
+  .topbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .main {
+    padding: 1.2rem 0.8rem 2rem;
+  }
+
+  .page-section {
+    max-width: 100%;
+  }
+}
+

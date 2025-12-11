@@ -1,0 +1,25 @@
+<div class="login-box">
+  <h3>Login</h3>
+  <p class="hint">
+    Melde dich mit deinem Lehrer- oder Schüler-Account an.
+  </p>
+
+  <div class="field">
+    <label for="username">Benutzername</label>
+    <input id="username" name="username" [(ngModel)]="username" />
+  </div>
+
+  <div class="field">
+    <label for="password">Passwort</label>
+    <input id="password" name="password" type="password" [(ngModel)]="password" />
+  </div>
+
+  <button type="button" (click)="onSubmit()" [disabled]="loading">
+    {{ loading ? 'Einloggen...' : 'Login' }}
+  </button>
+
+  <p *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </p>
+
+</div>

@@ -1,0 +1,60 @@
+<div class="admin-wrapper">
+
+  <h2 class="page-title">Userverwaltung</h2>
+
+  <div class="admin-card">
+    <h3>Neuen Benutzer anlegen</h3>
+
+    <div class="admin-grid">
+      <div>
+        <label>Username</label>
+        <!-- HIER: username, nicht newUsername -->
+        <input [(ngModel)]="username" placeholder="z. B. anna.schmidt" />
+      </div>
+
+      <div>
+        <label>Passwort</label>
+        <!-- HIER: password, nicht newPassword -->
+        <input [(ngModel)]="password" type="password" placeholder="Passwort" />
+      </div>
+
+      <div>
+        <label>Rolle</label>
+        <!-- HIER: role, nicht newRole -->
+        <select [(ngModel)]="role">
+          <option value="STUDENT">Schüler</option>
+          <option value="TEACHER">Lehrer</option>
+          <option value="ADMIN">Administrator</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="primary-btn" (click)="createUser()">Benutzer erstellen</button>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+    <p class="success" *ngIf="success">{{ success }}</p>
+  </div>
+
+  <div class="admin-card">
+    <h3>Bestehende Benutzer</h3>
+
+    <table class="user-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Benutzername</th>
+        <th>Rolle</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let u of users">
+        <td>{{ u.id }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.role }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -1,0 +1,270 @@
+.start-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* ===== Lehrer/Admin: Create-Event-Karte ===== */
+
+.teacher-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 1.1rem 1.3rem 1.3rem;
+  border: 1px solid rgba(129, 85, 255, 0.18);
+  box-shadow: 0 18px 40px rgba(76, 29, 149, 0.15);
+}
+
+.teacher-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.teacher-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #4c1d95;
+}
+
+.teacher-header p {
+  margin: 0.25rem 0 0;
+  font-size: 0.86rem;
+  color: #6b21a8;
+}
+
+.teacher-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #5b21b6;
+}
+
+.field input,
+.field textarea {
+  border-radius: 10px;
+  border: 1px solid rgba(148, 107, 255, 0.35);
+  padding: 0.4rem 0.55rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  background: #faf5ff;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.18);
+  background: #f5f3ff;
+}
+
+.teacher-actions {
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.teacher-actions button {
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+  color: #fdfbff;
+  box-shadow: 0 10px 25px rgba(88, 28, 135, 0.35);
+  transition: transform 0.1s ease, box-shadow 0.18s ease, filter 0.15s ease;
+}
+
+.teacher-actions button:hover {
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(88, 28, 135, 0.4);
+}
+
+.danger-btn {
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.82rem;
+  cursor: pointer;
+  background: rgba(239, 68, 68, 0.08);
+  color: #b91c1c;
+  border: 1px solid rgba(248, 113, 113, 0.6);
+}
+
+.danger-btn:hover {
+  background: rgba(248, 113, 113, 0.18);
+}
+
+/* Hinweise / Fehler */
+
+.error-text {
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  color: #b91c1c;
+}
+
+.info-text {
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  color: #166534;
+}
+
+/* ===== Schüler-Eventliste ===== */
+
+.events-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 1rem 1.2rem 1.2rem;
+  border: 1px solid rgba(129, 85, 255, 0.16);
+  box-shadow: 0 16px 40px rgba(76, 29, 149, 0.15);
+}
+
+.events-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.events-card-header h3 {
+  margin: 0;
+  font-size: 1.0rem;
+  color: #4c1d95;
+}
+
+.chip {
+  font-size: 0.78rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+/* Eventkarten */
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 0.4rem;
+}
+
+.event-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 15px;
+  background: linear-gradient(
+    135deg,
+    rgba(129, 85, 255, 0.05),
+    rgba(196, 181, 253, 0.22)
+  );
+  border: 1px solid rgba(129, 85, 255, 0.25);
+}
+
+.event-main h4 {
+  margin: 0;
+  font-size: 0.96rem;
+  color: #4c1d95;
+}
+
+.event-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+.badge {
+  font-size: 0.78rem;
+  padding: 0.16rem 0.5rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid rgba(129, 85, 255, 0.22);
+}
+
+.event-description {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: #5b21b6;
+}
+
+.event-actions {
+  display: flex;
+  align-items: center;
+}
+
+.event-actions button {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 600;
+  background: #7c3aed;
+  color: #fdfbff;
+  box-shadow: 0 10px 24px rgba(88, 28, 135, 0.35);
+  transition: transform 0.1s ease, box-shadow 0.18s ease, filter 0.15s ease;
+}
+
+.event-actions button.secondary {
+  background: #ffffff;
+  color: #7c3aed;
+  border: 1px solid rgba(124, 58, 237, 0.6);
+  box-shadow: none;
+}
+
+.event-actions button:hover {
+  filter: brightness(1.02);
+  transform: translateY(-1px);
+}
+
+/* Leere Zustände */
+
+.empty-state {
+  font-size: 0.88rem;
+  color: #6b21a8;
+}
+
+/* Responsiv */
+
+@media (max-width: 768px) {
+  .teacher-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .event-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .event-actions {
+    align-self: flex-end;
+  }
+}

@@ -1,0 +1,53 @@
+<div class="chat-wrapper">
+  <section class="chat-card">
+    <header class="chat-header">
+      <div>
+        <h2>Chat zum Event</h2>
+        <p>{{ event.title }}</p>
+      </div>
+      <div class="hint">
+        <span>Lehrer &amp; Schüler können hier schreiben.</span>
+      </div>
+    </header>
+
+    <div class="chat-body">
+      <p *ngIf="loading" class="info">Nachrichten werden geladen…</p>
+      <p *ngIf="error" class="error">{{ error }}</p>
+
+      <div class="messages" *ngIf="!loading">
+        <div
+          *ngFor="let m of messages"
+          class="message"
+          [ngClass]="{ own: isOwn(m) }"
+        >
+          <div class="meta">
+            <span class="author">{{ m.author.username}}<-></span>
+            <span class="time">{{ m.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
+          </div>
+          <div class="content">
+            {{ m.content }}
+          </div>
+        </div>
+
+        <div *ngIf="messages.length === 0 && !error" class="empty">
+          Noch keine Nachrichten. Starte die Unterhaltung!
+        </div>
+      </div>
+    </div>
+
+    <footer class="chat-footer">
+      <textarea
+        [(ngModel)]="newMessage"
+        rows="2"
+        placeholder="Nachricht schreiben…"
+      ></textarea>
+      <button
+        type="button"
+        (click)="send()"
+        [disabled]="sending || !newMessage.trim()"
+      >
+        {{ sending ? 'Senden…' : 'Senden' }}
+      </button>
+    </footer>
+  </section>
+</div>

@@ -1,0 +1,80 @@
+<div class="regs-wrapper">
+  <section class="regs-card">
+    <header class="regs-header">
+      <div>
+        <h2>Meine Anmeldungen</h2>
+        <p>Hier siehst du alle Events, für die du angemeldet bist – inklusive Zahlungsstatus.</p>
+      </div>
+      <button type="button" (click)="loadRegistrations()" [disabled]="loading">
+        {{ loading ? 'Aktualisiere…' : 'Aktualisieren' }}
+      </button>
+    </header>
+
+    <p *ngIf="error" class="error-text">{{ error }}</p>
+
+    <div *ngIf="!loading && !error && registrations.length === 0" class="empty-state">
+      <p>Du bist derzeit für keine Events angemeldet.</p>
+      <p>Gehe zur Startseite, um dich für neue Events anzumelden.</p>
+    </div>
+
+    <div *ngIf="!loading && !error && registrations.length > 0" class="regs-list">
+      <article *ngFor="let r of registrations" class="reg-card">
+        <div class="reg-main">
+          <h3>{{ r.event.title }}</h3>
+
+          <div class="reg-meta">
+            <span class="badge">{{ r.event.date | date:'dd.MM.yyyy' }}</span>
+            <span class="badge" *ngIf="r.event.location">📍 {{ r.event.location }}</span>
+          </div>
+
+          <p class="reg-description" *ngIf="r.event.description">
+            {{ r.event.description }}
+          </p>
+
+          <div class="payment">
+            <ng-container *ngIf="r.event.price && r.event.price > 0; else freeEvent">
+              <span>
+                Betrag:
+                <strong>{{ r.event.price | currency:'EUR':'symbol':'1.2-2' }}</strong>
+              </span>
+              <span class="status" [class.paid]="r.paid" [class.unpaid]="!r.paid">
+                {{ r.paid ? 'Bezahlt' : 'Noch nicht bezahlt' }}
+              </span>
+
+              <button
+                *ngIf="!r.paid"
+                type="button"
+                (click)="pay(r)"
+              >
+                Jetzt bezahlen
+              </button>
+            </ng-container>
+
+            <ng-template #freeEvent>
+              <span>Dieses Event ist kostenlos.</span>
+            </ng-template>
+          </div>
+
+          <div class="others">
+            <h4>Angemeldete Schüler:</h4>
+            <ul>
+              <li *ngFor="let other of getRegistrationsForEvent(r.event.id)">
+                {{ other.student.username }}
+                <span class="mini-status" [class.paid]="other.paid" [class.unpaid]="!other.paid">
+                  {{ other.paid ? 'bezahlt' : 'offen' }}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="reg-side">
+          <div class="reg-time">
+            Angemeldet am<br />
+            <span>{{ r.registeredAt | date:'dd.MM.yyyy HH:mm' }}</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>
