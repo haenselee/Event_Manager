@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/event-messages")
 @CrossOrigin(origins = "http://localhost:4200")
-public class EventMessageController {
+public class  EventMessageController {
 
     private final EventMessageRepository messageRepo;
     private final EventRepository eventRepo;
