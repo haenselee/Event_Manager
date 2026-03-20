@@ -31,6 +31,12 @@ public class Registration {
     @Column(nullable = false)
     private boolean paid = false;
 
+    private String stripeSessionId;
+
+    private String stripePaymentIntentId;
+
+    private LocalDateTime paymentCompletedAt;
+
     @PrePersist
     public void prePersist() {
         if (registeredAt == null) {
@@ -72,5 +78,29 @@ public class Registration {
 
     public void setPaid(boolean paid) {
         this.paid = paid;
+    }
+
+    public String getStripeSessionId() {
+        return stripeSessionId;
+    }
+
+    public void setStripeSessionId(String stripeSessionId) {
+        this.stripeSessionId = stripeSessionId;
+    }
+
+    public String getStripePaymentIntentId() {
+        return stripePaymentIntentId;
+    }
+
+    public void setStripePaymentIntentId(String stripePaymentIntentId) {
+        this.stripePaymentIntentId = stripePaymentIntentId;
+    }
+
+    public LocalDateTime getPaymentCompletedAt() {
+        return paymentCompletedAt;
+    }
+
+    public void setPaymentCompletedAt(LocalDateTime paymentCompletedAt) {
+        this.paymentCompletedAt = paymentCompletedAt;
     }
 }

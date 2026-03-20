@@ -20,9 +20,7 @@ public class RegistrationController {
     private final UserRepository userRepo;
     private final EventRepository eventRepo;
 
-    public RegistrationController(RegistrationRepository regRepo,
-                                  UserRepository userRepo,
-                                  EventRepository eventRepo) {
+    public RegistrationController(RegistrationRepository regRepo, UserRepository userRepo, EventRepository eventRepo) {
         this.regRepo = regRepo;
         this.userRepo = userRepo;
         this.eventRepo = eventRepo;
@@ -35,7 +33,6 @@ public class RegistrationController {
 
     @PostMapping
     public Registration register(@RequestParam Long studentId, @RequestParam Long eventId) {
-
         if (regRepo.existsByStudent_IdAndEvent_Id(studentId, eventId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bereits angemeldet");
         }
@@ -49,7 +46,12 @@ public class RegistrationController {
         Registration reg = new Registration();
         reg.setStudent(student);
         reg.setEvent(event);
-        reg.setPaid(false);
+
+        if (event.getPrice() == null || event.getPrice() <= 0) {
+            reg.setPaid(true);
+        } else {
+            reg.setPaid(false);
+        }
 
         return regRepo.save(reg);
     }
@@ -57,9 +59,11 @@ public class RegistrationController {
     @DeleteMapping
     public ResponseEntity<Void> unregister(@RequestParam Long studentId, @RequestParam Long eventId) {
         List<Registration> regs = regRepo.findByStudent_IdAndEvent_Id(studentId, eventId);
+
         if (regs.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+
         regRepo.deleteAll(regs);
         return ResponseEntity.noContent().build();
     }
@@ -67,15 +71,5 @@ public class RegistrationController {
     @GetMapping("/by-event")
     public List<Registration> byEvent(@RequestParam Long eventId) {
         return regRepo.findByEvent_Id(eventId);
-    }
-
-    @PostMapping("/pay")
-    public Registration markPaid(@RequestParam Long studentId, @RequestParam Long eventId) {
-        Registration reg = regRepo.findFirstByStudent_IdAndEvent_Id(studentId, eventId);
-        if (reg == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Keine Anmeldung gefunden");
-        }
-        reg.setPaid(true);
-        return regRepo.save(reg);
     }
 }

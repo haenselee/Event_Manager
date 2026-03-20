@@ -2,12 +2,11 @@
   <section class="chat-card">
     <header class="chat-header">
       <div>
-        <h2>Chat zum Event</h2>
-        <p>{{ event.title }}</p>
+        <h2>Chat: {{ event.title }}</h2>
       </div>
       <div class="hint">
         <span *ngIf="connecting">Verbindung wird aufgebaut…</span>
-        <span *ngIf="!connecting">Lehrer &amp; Schüler können hier schreiben.</span>
+        <span *ngIf="!connecting"> </span>
       </div>
     </header>
 
@@ -22,7 +21,8 @@
           [ngClass]="{ own: isOwn(m) }"
         >
           <div class="meta">
-            <span class="author">{{ m.author.username }} ({{ m.author.role }})</span>
+            <span class="author">{{ m.author.username }}</span>
+            <span>|</span>
             <span class="time">{{ m.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
           </div>
           <div class="content">

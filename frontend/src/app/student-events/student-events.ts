@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  NgZone,
-  ChangeDetectorRef,
-  Output,
-  EventEmitter
-} from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '../event.service';
@@ -21,7 +14,6 @@ import { Event } from '../event.model';
   styleUrl: './student-events.css'
 })
 export class StudentEventsComponent implements OnInit {
-
   @Output() openChat = new EventEmitter<{ id: number; title: string }>();
 
   events: Event[] = [];
@@ -33,12 +25,14 @@ export class StudentEventsComponent implements OnInit {
   infoMessage = '';
   createError = '';
 
-  // Eingabefelder für Lehrer/Admin
   newTitle = '';
-  newDate = '';          // yyyy-MM-dd
+  newDate = '';
   newLocation = '';
   newPrice: number | null = null;
   newDescription = '';
+
+  editMode = false;
+  editingEventId: number | null = null;
 
   constructor(
     public auth: AuthService,
@@ -50,10 +44,12 @@ export class StudentEventsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.loadEditEventFromStorage();
   }
 
   private loadData(): void {
     const user = this.auth.currentUser;
+
     if (!user) {
       this.error = 'Kein Benutzer eingeloggt.';
       return;
@@ -68,7 +64,6 @@ export class StudentEventsComponent implements OnInit {
           this.events = events;
           this.loading = false;
 
-          // Registrierungen nur für Schüler laden
           if (this.auth.isStudent) {
             this.regService.getMyRegistrations(user.id).subscribe({
               next: (regs) => {
@@ -76,6 +71,7 @@ export class StudentEventsComponent implements OnInit {
                   const ids = regs
                     .map(r => r.event.id)
                     .filter((id): id is number => id != null);
+
                   this.registeredEventIds = new Set(ids);
                   this.cdr.detectChanges();
                 });
@@ -104,7 +100,82 @@ export class StudentEventsComponent implements OnInit {
     });
   }
 
-  // --------- Lehrer/Admin: Event erstellen & löschen ---------
+  private loadEditEventFromStorage(): void {
+    const raw = localStorage.getItem('editEvent');
+
+    if (!raw) return;
+
+    try {
+      const event: Event = JSON.parse(raw);
+
+      this.editMode = true;
+      this.editingEventId = event.id ?? null;
+
+      this.newTitle = event.title ?? '';
+      this.newDate = event.date ?? '';
+      this.newLocation = event.location ?? '';
+      this.newPrice = event.price ?? 0;
+      this.newDescription = event.description ?? '';
+
+      this.infoMessage = 'Event zum Bearbeiten geladen.';
+      this.createError = '';
+
+      localStorage.removeItem('editEvent');
+      this.cdr.detectChanges();
+    } catch (e) {
+      console.error('Fehler beim Laden des Edit-Events aus localStorage', e);
+      localStorage.removeItem('editEvent');
+    }
+  }
+
+  saveEvent(): void {
+    if (!this.auth.isTeacher && !this.auth.isAdmin) return;
+
+    if (!this.newTitle.trim() || !this.newDate) {
+      this.createError = 'Bitte mindestens Titel und Datum angeben.';
+      this.infoMessage = '';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const payload: Event = {
+      title: this.newTitle.trim(),
+      date: this.newDate,
+      location: this.newLocation.trim(),
+      price: this.newPrice ?? 0,
+      description: this.newDescription.trim()
+    };
+
+    if (this.editMode && this.editingEventId != null) {
+      this.eventService.updateEvent(this.editingEventId, payload).subscribe({
+        next: (updated) => {
+          this.zone.run(() => {
+            const index = this.events.findIndex(e => e.id === updated.id);
+            if (index !== -1) {
+              this.events[index] = updated;
+            }
+
+            this.resetForm();
+            this.editMode = false;
+            this.editingEventId = null;
+            this.createError = '';
+            this.infoMessage = 'Event wurde aktualisiert.';
+            this.cdr.detectChanges();
+          });
+        },
+        error: (err) => {
+          this.zone.run(() => {
+            console.error('Fehler beim Aktualisieren des Events', err);
+            this.createError = 'Fehler beim Aktualisieren des Events.';
+            this.infoMessage = '';
+            this.cdr.detectChanges();
+          });
+        }
+      });
+    } else {
+      this.createEvent();
+    }
+  }
 
   createEvent(): void {
     if (!this.auth.isTeacher && !this.auth.isAdmin) return;
@@ -128,13 +199,7 @@ export class StudentEventsComponent implements OnInit {
       next: (created) => {
         this.zone.run(() => {
           this.events.push(created);
-
-          this.newTitle = '';
-          this.newDate = '';
-          this.newLocation = '';
-          this.newPrice = null;
-          this.newDescription = '';
-
+          this.resetForm();
           this.createError = '';
           this.infoMessage = 'Event wurde erstellt.';
           this.cdr.detectChanges();
@@ -151,6 +216,16 @@ export class StudentEventsComponent implements OnInit {
     });
   }
 
+  cancelEdit(): void {
+    this.resetForm();
+    this.editMode = false;
+    this.editingEventId = null;
+    this.createError = '';
+    this.infoMessage = '';
+    localStorage.removeItem('editEvent');
+    this.cdr.detectChanges();
+  }
+
   deleteAllEvents(): void {
     if (!this.auth.isTeacher && !this.auth.isAdmin) return;
 
@@ -159,7 +234,11 @@ export class StudentEventsComponent implements OnInit {
         this.zone.run(() => {
           this.events = [];
           this.registeredEventIds.clear();
+          this.resetForm();
+          this.editMode = false;
+          this.editingEventId = null;
           this.infoMessage = 'Alle Events wurden gelöscht.';
+          this.createError = '';
           this.cdr.detectChanges();
         });
       },
@@ -167,13 +246,20 @@ export class StudentEventsComponent implements OnInit {
         this.zone.run(() => {
           console.error('Fehler beim Löschen der Events', err);
           this.createError = 'Fehler beim Löschen der Events.';
+          this.infoMessage = '';
           this.cdr.detectChanges();
         });
       }
     });
   }
 
-  // --------- Schüler: An-/Abmelden ---------
+  private resetForm(): void {
+    this.newTitle = '';
+    this.newDate = '';
+    this.newLocation = '';
+    this.newPrice = null;
+    this.newDescription = '';
+  }
 
   isRegistered(eventId: number): boolean {
     return this.registeredEventIds.has(eventId);
@@ -181,8 +267,10 @@ export class StudentEventsComponent implements OnInit {
 
   toggleRegistration(eventId?: number): void {
     const user = this.auth.currentUser;
+
     if (!user) return;
     if (!this.auth.isStudent) return;
+
     if (eventId == null) {
       console.warn('Event ohne ID, kann nicht registrieren/abmelden.');
       return;

@@ -78,4 +78,24 @@ export class EventOverviewComponent implements OnInit {
   getRegistrations(id: number): Registration[] {
     return this.regsByEvent.get(id) || [];
   }
+  editEvent(event: Event): void {
+    localStorage.setItem('editEvent', JSON.stringify(event));
+    window.location.href = '/student-events';
+  }
+
+deleteEvent(eventId?: number): void {
+  if (!this.auth.isTeacher && !this.auth.isAdmin) return;
+  if (eventId == null) return;
+
+  this.eventService.deleteEvent(eventId).subscribe({
+    next: () => {
+      alert('Event wurde gelöscht.');
+      window.location.href = '/student-events';
+    },
+    error: (err) => {
+      console.error('Fehler beim Löschen des Events', err);
+      alert('Fehler beim Löschen des Events.');
+    }
+  });
+}
 }

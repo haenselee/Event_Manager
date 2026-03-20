@@ -67,6 +67,7 @@
 
 .message .meta {
   display: flex;
+  gap: 6px;
   justify-content: space-between;
   font-size: 0.75rem;
   color: #6b7280;

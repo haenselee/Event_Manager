@@ -45,8 +45,9 @@
                 *ngIf="!r.paid"
                 type="button"
                 (click)="pay(r)"
+                [disabled]="loading"
               >
-                Jetzt bezahlen
+                {{ loading ? 'Weiterleitung…' : 'Jetzt bezahlen' }}
               </button>
             </ng-container>
 

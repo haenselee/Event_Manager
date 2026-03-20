@@ -50,7 +50,9 @@
     </div>
 
     <div class="teacher-actions">
-      <button type="button" (click)="createEvent()">Event erstellen</button>
+      <button type="button" (click)="saveEvent()">
+        {{ editMode ? 'Änderungen speichern' : 'Event erstellen' }}
+      </button>
     </div>
 
     <p *ngIf="createError" class="error-text">{{ createError }}</p>

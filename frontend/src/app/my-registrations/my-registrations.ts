@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegistrationService, Registration } from '../registration';
 import { AuthService } from '../auth';
+import { PaymentService } from '../payment.service';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -22,6 +23,7 @@ export class MyRegistrationsComponent implements OnInit {
   constructor(
     private regService: RegistrationService,
     private auth: AuthService,
+    private paymentService: PaymentService,
     private zone: NgZone,
     private cdr: ChangeDetectorRef
   ) {}
@@ -46,7 +48,6 @@ export class MyRegistrationsComponent implements OnInit {
           this.registrations = regs;
           this.loading = false;
 
-          // IDs einsammeln, undefined rausfiltern
           const eventIds = Array.from(
             new Set(
               regs
@@ -60,7 +61,6 @@ export class MyRegistrationsComponent implements OnInit {
             return;
           }
 
-          // Alle Registrierungen pro Event holen
           forkJoin(eventIds.map(id => this.regService.getByEvent(id))).subscribe({
             next: (allResults) => {
               this.zone.run(() => {
@@ -92,7 +92,6 @@ export class MyRegistrationsComponent implements OnInit {
     });
   }
 
-  // <-- WICHTIG: eventId optional
   getRegistrationsForEvent(eventId?: number): Registration[] {
     if (eventId == null) {
       return [];
@@ -101,33 +100,20 @@ export class MyRegistrationsComponent implements OnInit {
   }
 
   pay(reg: Registration): void {
-    const user = this.auth.currentUser;
-    if (!user) return;
-
-    const eventId = reg.event.id;
-    if (eventId == null) {
-      console.warn('Event hat keine ID, kann nicht bezahlen.');
+    if (!reg.id) {
+      console.warn('Registrierung hat keine ID, Zahlung kann nicht gestartet werden.');
       return;
     }
+    this.loading = true;
 
-    this.regService.pay(user.id, eventId).subscribe({
-      next: (updated) => {
-        this.zone.run(() => {
-          reg.paid = updated.paid;
-
-          const list = this.regsByEvent.get(eventId);
-          if (list) {
-            const idx = list.findIndex(r => r.id === updated.id);
-            if (idx >= 0) {
-              list[idx].paid = updated.paid;
-            }
-          }
-
-          this.cdr.detectChanges();
-        });
+    this.paymentService.createCheckoutSession(reg.id).subscribe({
+      next: (response) => {
+        window.location.href = response.url;
       },
       error: (err) => {
-        console.error('Fehler beim Bezahlen', err);
+        console.error('Fehler beim Starten der Zahlung', err);
+        alert('Zahlung konnte nicht gestartet werden.');
+        this.loading = false;
       }
     });
   }

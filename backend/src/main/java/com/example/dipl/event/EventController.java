@@ -2,7 +2,9 @@ package com.example.dipl.event;
 
 import com.example.dipl.chat.EventMessageRepository;
 import com.example.dipl.register.RegistrationRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -33,6 +35,30 @@ public class EventController {
     @PostMapping
     public Event createEvent(@RequestBody Event event) {
         return eventRepo.save(event);
+    }
+
+    @PutMapping("/{id}")
+    public Event updateEvent(@PathVariable Long id, @RequestBody Event updatedEvent) {
+        Event existingEvent = eventRepo.findById(id).orElseThrow();
+
+        existingEvent.setTitle(updatedEvent.getTitle());
+        existingEvent.setDescription(updatedEvent.getDescription());
+        existingEvent.setLocation(updatedEvent.getLocation());
+        existingEvent.setDate(updatedEvent.getDate());
+        existingEvent.setPrice(updatedEvent.getPrice());
+
+        return eventRepo.save(existingEvent);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
+        Event event = eventRepo.findById(id).orElseThrow();
+
+        messageRepo.deleteByEvent_Id(id);
+        regRepo.deleteByEvent_Id(id);
+        eventRepo.delete(event);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping
