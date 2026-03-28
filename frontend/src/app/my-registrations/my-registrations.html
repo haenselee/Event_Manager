@@ -3,11 +3,7 @@
     <header class="regs-header">
       <div>
         <h2>Meine Anmeldungen</h2>
-        <p>Hier siehst du alle Events, für die du angemeldet bist – inklusive Zahlungsstatus.</p>
       </div>
-      <button type="button" (click)="loadRegistrations()" [disabled]="loading">
-        {{ loading ? 'Aktualisiere…' : 'Aktualisieren' }}
-      </button>
     </header>
 
     <p *ngIf="error" class="error-text">{{ error }}</p>
@@ -56,7 +52,7 @@
             </ng-template>
           </div>
 
-          <div class="others">
+          <!--div class="others">
             <h4>Angemeldete Schüler:</h4>
             <ul>
               <li *ngFor="let other of getRegistrationsForEvent(r.event.id)">
@@ -66,7 +62,7 @@
                 </span>
               </li>
             </ul>
-          </div>
+          </div-->
         </div>
 
         <div class="reg-side">

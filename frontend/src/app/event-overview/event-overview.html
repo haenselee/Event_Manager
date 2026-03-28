@@ -16,22 +16,7 @@
         </div>
       </div>
 
-      <button class="chat-btn"
-              (click)="openChat.emit({ id: ev.id!, title: ev.title })">
-        Chat-Forum
-      </button>
-      <button
-        *ngIf="auth.isTeacher || auth.isAdmin"
-        type="button"
-        (click)="editEvent(ev)">
-        Event bearbeiten
-      </button>
-      <button
-        *ngIf="auth.isTeacher || auth.isAdmin"
-        type="button"
-        (click)="deleteEvent(ev.id)">
-        Event löschen
-      </button>
+
     </header>
 
     <div *ngIf="getRegistrations(ev.id!).length > 0; else noRegs">
@@ -53,6 +38,26 @@
         </tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="btna">
+      <button class="chat-btn"
+              (click)="openChat.emit({ id: ev.id!, title: ev.title })">
+        Chat-Forum
+      </button>
+      <button
+        *ngIf="auth.isTeacher || auth.isAdmin"
+        type="button"
+        (click)="editEvent(ev)">
+        Event bearbeiten
+      </button>
+      <button
+        *ngIf="auth.isTeacher || auth.isAdmin"
+        type="button"
+        (click)="deleteEvent(ev.id)">
+        Event löschen
+      </button>
+
     </div>
 
     <ng-template #noRegs>
