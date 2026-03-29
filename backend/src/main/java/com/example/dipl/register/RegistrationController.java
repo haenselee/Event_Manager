@@ -1,9 +1,9 @@
 package com.example.dipl.register;
 
-import com.example.dipl.user.User;
-import com.example.dipl.user.UserRepository;
 import com.example.dipl.event.Event;
 import com.example.dipl.event.EventRepository;
+import com.example.dipl.user.User;
+import com.example.dipl.user.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +43,11 @@ public class RegistrationController {
         Event event = eventRepo.findById(eventId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event nicht gefunden"));
 
+        long currentRegistrations = regRepo.countByEvent_Id(eventId);
+        if (event.getMaxParticipants() != null && currentRegistrations >= event.getMaxParticipants()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dieses Event ist bereits voll");
+        }
+
         Registration reg = new Registration();
         reg.setStudent(student);
         reg.setEvent(event);
@@ -64,7 +69,31 @@ public class RegistrationController {
             return ResponseEntity.noContent().build();
         }
 
+        boolean containsPaidRegistration = regs.stream().anyMatch(Registration::isPaid);
+        if (containsPaidRegistration) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Eine bezahlte Anmeldung kann nicht storniert werden"
+            );
+        }
+
         regRepo.deleteAll(regs);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{registrationId}")
+    public ResponseEntity<Void> deleteRegistrationById(@PathVariable Long registrationId) {
+        Registration registration = regRepo.findById(registrationId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Registrierung nicht gefunden"));
+
+        if (registration.isPaid()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Eine bezahlte Anmeldung kann nicht entfernt werden"
+            );
+        }
+
+        regRepo.delete(registration);
         return ResponseEntity.noContent().build();
     }
 

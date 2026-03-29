@@ -64,7 +64,7 @@ public class AuthController {
 
         User user = new User(
                 request.getUsername(),
-                passwordEncoder.encode(request.getPassword()), // 🔐 WICHTIG
+                passwordEncoder.encode(request.getPassword()),
                 role
         );
 

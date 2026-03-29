@@ -268,3 +268,39 @@
     align-self: flex-end;
   }
 }
+
+.hint-text {
+  font-size: 0.78rem;
+  color: #7c3aed;
+}
+
+.secondary-btn {
+  background: #ffffff !important;
+  color: #7c3aed !important;
+  border: 1px solid rgba(124, 58, 237, 0.5) !important;
+  box-shadow: none !important;
+}
+
+.warning-text {
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  color: #b45309;
+}
+
+.paid-badge {
+  background: #ecfdf5;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.field input:disabled {
+  background: #f5f5f5;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.event-actions button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}

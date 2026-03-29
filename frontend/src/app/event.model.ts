@@ -3,6 +3,7 @@ export interface Event {
   title: string;
   description: string;
   location: string;
-  date: string; // DD/MM/YYYY
+  date: string;
   price: number;
+  maxParticipants?: number | null;
 }

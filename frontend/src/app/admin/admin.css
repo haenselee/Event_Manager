@@ -77,6 +77,34 @@ input, select {
   border-bottom: 1px solid #e5e7eb;
 }
 
+.sort-btn {
+  background: transparent;
+  color: inherit;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.sort-btn:hover {
+  text-decoration: underline;
+}
+
+.delete-btn {
+  background: #ffffff;
+  color: #b91c1c;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @media (max-width: 700px) {
   .admin-grid {
     grid-template-columns: 1fr;

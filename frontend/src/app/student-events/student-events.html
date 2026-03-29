@@ -1,10 +1,9 @@
 <div class="start-wrapper">
 
-  <!-- ====== Lehrer/Admin: Create-Event-Seite ====== -->
   <section *ngIf="auth.isTeacher || auth.isAdmin" class="teacher-card">
     <header class="teacher-header">
       <div>
-        <h2>Neues Event anlegen</h2>
+        <h2>{{ editMode ? 'Event bearbeiten' : 'Neues Event anlegen' }}</h2>
         <p>Erstelle Klassen-Events. Schüler können sich danach direkt anmelden.</p>
       </div>
       <button type="button" class="danger-btn" (click)="deleteAllEvents()">
@@ -15,10 +14,7 @@
     <div class="teacher-grid">
       <div class="field">
         <label>Titel</label>
-        <input
-          [(ngModel)]="newTitle"
-          placeholder="z. B. Wien-Exkursion"
-        />
+        <input [(ngModel)]="newTitle" placeholder="z. B. Wien-Exkursion" />
       </div>
 
       <div class="field">
@@ -28,15 +24,33 @@
 
       <div class="field">
         <label>Ort</label>
-        <input
-          [(ngModel)]="newLocation"
-          placeholder="z. B. Technisches Museum"
-        />
+        <input [(ngModel)]="newLocation" placeholder="z. B. Technisches Museum" />
       </div>
 
       <div class="field">
         <label>Preis (EUR)</label>
-        <input [(ngModel)]="newPrice" type="number" min="0" step="0.5" />
+        <input
+          [(ngModel)]="newPrice"
+          type="number"
+          min="0"
+          step="0.5"
+          [disabled]="priceLocked"
+        />
+        <small *ngIf="priceLocked" class="hint-text">
+          Der Preis kann nicht mehr geändert werden, weil bereits Schüler bezahlt haben.
+        </small>
+      </div>
+
+      <div class="field">
+        <label>Obergrenze Teilnehmer</label>
+        <input
+          [(ngModel)]="newMaxParticipants"
+          type="number"
+          min="1"
+          step="1"
+          placeholder="z. B. 20"
+        />
+        <small class="hint-text">Leer lassen = keine Obergrenze</small>
       </div>
 
       <div class="field field-full">
@@ -50,6 +64,9 @@
     </div>
 
     <div class="teacher-actions">
+      <button type="button" *ngIf="editMode" class="secondary-btn" (click)="cancelEdit()">
+        Abbrechen
+      </button>
       <button type="button" (click)="saveEvent()">
         {{ editMode ? 'Änderungen speichern' : 'Event erstellen' }}
       </button>
@@ -59,7 +76,6 @@
     <p *ngIf="infoMessage" class="info-text">{{ infoMessage }}</p>
   </section>
 
-  <!-- ====== Schüler-Startseite: nur Event-Liste ====== -->
   <section *ngIf="auth.isStudent" class="events-card">
     <header class="events-card-header">
       <h3>Verfügbare Events</h3>
@@ -90,7 +106,12 @@
             <span class="badge" *ngIf="!e.price || e.price === 0">
               Kostenlos
             </span>
+            <span class="badge capacity-badge">
+              Plätze: {{ getCapacityText(e) }}
+            </span>
+            <span class="badge paid-badge" *ngIf="isPaidRegistration(e.id!)">Bereits bezahlt</span>
           </div>
+
           <p class="event-description" *ngIf="e.description">
             {{ e.description }}
           </p>
@@ -100,16 +121,13 @@
           <button
             type="button"
             (click)="toggleRegistration(e.id)"
-            [class.secondary]="isRegistered(e.id!)"
+            [class.secondary]="isRegistered(e.id!) && !isPaidRegistration(e.id!)"
+            [disabled]="isPaidRegistration(e.id!) || isEventFull(e)"
           >
-            {{ isRegistered(e.id!) ? 'Abmelden' : 'Anmelden' }}
+            {{ getRegistrationButtonLabel(e) }}
           </button>
 
-          <button
-            type="button"
-            class="chat-btn"
-            (click)="openChat.emit({ id: e.id!, title: e.title })"
-          >
+          <button type="button" class="chat-btn" (click)="openChat.emit({ id: e.id!, title: e.title })">
             Chat-Forum
           </button>
         </div>

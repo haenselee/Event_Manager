@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+// @ts-ignore
 import { MyRegistrations } from './my-registrations';
 
 describe('MyRegistrations', () => {

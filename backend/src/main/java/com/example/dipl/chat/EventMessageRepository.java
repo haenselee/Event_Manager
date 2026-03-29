@@ -7,4 +7,5 @@ public interface EventMessageRepository extends JpaRepository<EventMessage, Long
     List<EventMessage> findByEvent_IdOrderByCreatedAtAsc(Long eventId);
 
     void deleteByEvent_Id(Long eventId);
+    void deleteByAuthor_Id(Long authorId);
 }

@@ -8,19 +8,16 @@
     <div class="admin-grid">
       <div>
         <label>Username</label>
-        <!-- HIER: username, nicht newUsername -->
         <input [(ngModel)]="username" placeholder="z. B. anna.schmidt" />
       </div>
 
       <div>
         <label>Passwort</label>
-        <!-- HIER: password, nicht newPassword -->
         <input [(ngModel)]="password" type="password" placeholder="Passwort" />
       </div>
 
       <div>
         <label>Rolle</label>
-        <!-- HIER: role, nicht newRole -->
         <select [(ngModel)]="role">
           <option value="STUDENT">Schüler</option>
           <option value="TEACHER">Lehrer</option>
@@ -41,17 +38,40 @@
     <table class="user-table">
       <thead>
       <tr>
-        <th>ID</th>
-        <th>Benutzername</th>
-        <th>Rolle</th>
+        <th>
+          <button type="button" class="sort-btn" (click)="setSort('id')">
+            ID {{ getSortIndicator('id') }}
+          </button>
+        </th>
+        <th>
+          <button type="button" class="sort-btn" (click)="setSort('username')">
+            Benutzername {{ getSortIndicator('username') }}
+          </button>
+        </th>
+        <th>
+          <button type="button" class="sort-btn" (click)="setSort('role')">
+            Rolle {{ getSortIndicator('role') }}
+          </button>
+        </th>
+        <th>Aktion</th>
       </tr>
       </thead>
 
       <tbody>
-      <tr *ngFor="let u of users">
+      <tr *ngFor="let u of getSortedUsers()">
         <td>{{ u.id }}</td>
         <td>{{ u.username }}</td>
         <td>{{ u.role }}</td>
+        <td>
+          <button
+            class="delete-btn"
+            type="button"
+            (click)="deleteUser(u)"
+            [disabled]="auth.currentUser?.id === u.id"
+          >
+            Löschen
+          </button>
+        </td>
       </tr>
       </tbody>
     </table>

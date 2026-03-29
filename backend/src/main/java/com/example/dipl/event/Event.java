@@ -1,4 +1,3 @@
-// Event.java
 package com.example.dipl.event;
 
 import jakarta.persistence.*;
@@ -18,9 +17,9 @@ public class Event {
 
     private LocalDate date;
 
-    private Double price;      // 0.0 = free
+    private Double price; // 0.0 = free
 
-
+    private Integer maxParticipants; // null = keine Obergrenze
 
     public Long getId() {
         return id;
@@ -68,5 +67,13 @@ public class Event {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Integer getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public void setMaxParticipants(Integer maxParticipants) {
+        this.maxParticipants = maxParticipants;
     }
 }

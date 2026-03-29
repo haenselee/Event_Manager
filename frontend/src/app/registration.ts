@@ -37,6 +37,10 @@ export class RegistrationService {
     return this.http.delete<void>(`${this.apiUrl}?studentId=${studentId}&eventId=${eventId}`);
   }
 
+  unregisterByRegistrationId(registrationId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${registrationId}`);
+  }
+
   getByEvent(eventId: number): Observable<Registration[]> {
     return this.http.get<Registration[]>(`${this.apiUrl}/by-event?eventId=${eventId}`);
   }
