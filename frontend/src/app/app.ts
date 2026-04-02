@@ -1,12 +1,6 @@
-import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
-import { NgIf, NgClass } from '@angular/common';
-import { LoginComponent } from './login/login';
-import { AdminComponent } from './admin/admin';
-import { StudentEventsComponent } from './student-events/student-events';
-import { MyRegistrationsComponent } from './my-registrations/my-registrations';
-import { CalendarComponent } from './calendar/calendar';
-import { EventOverviewComponent } from './event-overview/event-overview';
-import { EventChatComponent } from './event-chat/event-chat';
+import { Component } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from './auth';
 import { AuthUser } from './auth-user';
 
@@ -15,53 +9,23 @@ import { AuthUser } from './auth-user';
   standalone: true,
   imports: [
     NgIf,
-    NgClass,
-    LoginComponent,
-    AdminComponent,
-    StudentEventsComponent,
-    MyRegistrationsComponent,
-    CalendarComponent,
-    EventOverviewComponent,
-    EventChatComponent
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class AppComponent {
 
-  activePage: 'events' | 'calendar' | 'my-registrations' | 'admin' | 'event-info' | 'event-chat'
-    = 'events';
-
-  selectedChatEvent: { id: number; title: string } | null = null;
-
   constructor(
     public auth: AuthService,
-    private zone: NgZone,
-    private cdr: ChangeDetectorRef
+    private router: Router
   ) {}
 
-  setPage(page: 'events' | 'calendar' | 'my-registrations' | 'admin' | 'event-info' | 'event-chat') {
-    this.zone.run(() => {
-      this.activePage = page;
-      this.cdr.detectChanges();
-    });
-  }
-
-  onOpenChat(ev: { id: number; title: string }) {
-    this.zone.run(() => {
-      this.selectedChatEvent = ev;
-      this.activePage = 'event-chat';
-      this.cdr.detectChanges();
-    });
-  }
-
   logout(): void {
-    this.zone.run(() => {
-      this.auth.logout();
-      this.activePage = 'events';
-      this.selectedChatEvent = null;
-      this.cdr.detectChanges();
-    });
+    this.auth.logout();
+    this.router.navigate(['/login']);
   }
 
   get currentUser(): AuthUser | null {

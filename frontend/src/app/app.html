@@ -8,7 +8,7 @@
       </div>
 
       <div class="login-body">
-        <app-login></app-login>
+        <router-outlet></router-outlet>
       </div>
     </div>
   </div>
@@ -25,51 +25,49 @@
         </div>
 
         <nav class="nav">
-          <button
+          <a
             class="nav-link"
-            [ngClass]="{ active: activePage === 'events' }"
-            (click)="setPage('events')"
+            routerLink="/events"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
           >
             Startseite
-          </button>
+          </a>
 
-          <button
+          <a
             class="nav-link"
-            [ngClass]="{ active: activePage === 'calendar' }"
-            (click)="setPage('calendar')"
+            routerLink="/calendar"
+            routerLinkActive="active"
           >
             Kalender
-          </button>
+          </a>
 
-          <!-- Nur Schüler -->
-          <button
+          <a
             class="nav-link"
             *ngIf="isStudent"
-            [ngClass]="{ active: activePage === 'my-registrations' }"
-            (click)="setPage('my-registrations')"
+            routerLink="/my-registrations"
+            routerLinkActive="active"
           >
             Meine Anmeldungen
-          </button>
+          </a>
 
-          <!-- Nur Lehrer/Admin: Event-Infos -->
-          <button
+          <a
             class="nav-link"
             *ngIf="isTeacher || isAdmin"
-            [ngClass]="{ active: activePage === 'event-info' }"
-            (click)="setPage('event-info')"
+            routerLink="/event-info"
+            routerLinkActive="active"
           >
             Event-Infos
-          </button>
+          </a>
 
-          <!-- Nur Admin: Userverwaltung -->
-          <button
+          <a
             class="nav-link"
             *ngIf="isAdmin"
-            [ngClass]="{ active: activePage === 'admin' }"
-            (click)="setPage('admin')"
+            routerLink="/admin"
+            routerLinkActive="active"
           >
             Userverwaltung
-          </button>
+          </a>
         </nav>
 
         <div class="user-area" *ngIf="currentUser">
@@ -86,35 +84,8 @@
     </header>
 
     <main class="main">
-      <!-- Startseite -->
-      <section *ngIf="activePage === 'events'" class="page-section">
-        <!-- Eine Komponente, die je nach Rolle anders aussieht -->
-        <app-student-events (openChat)="onOpenChat($event)"></app-student-events>
-      </section>
-
-      <!-- Kalender -->
-      <section *ngIf="activePage === 'calendar'" class="page-section">
-        <app-calendar (goToEvents)="setPage('events')"></app-calendar>
-      </section>
-
-      <!-- Meine Anmeldungen -->
-      <section *ngIf="activePage === 'my-registrations'" class="page-section">
-        <app-my-registrations></app-my-registrations>
-      </section>
-
-      <!-- Event-Infos (Lehrer/Admin) -->
-      <section *ngIf="activePage === 'event-info' && (isTeacher || isAdmin)" class="page-section">
-        <app-event-overview (openChat)="onOpenChat($event)"></app-event-overview>
-      </section>
-
-      <!-- Userverwaltung (nur Admin) -->
-      <section *ngIf="activePage === 'admin' && isAdmin" class="page-section">
-        <app-admin></app-admin>
-      </section>
-
-      <!-- Chat-Forum zu einem Event -->
-      <section *ngIf="activePage === 'event-chat' && selectedChatEvent" class="page-section">
-        <app-event-chat [event]="selectedChatEvent"></app-event-chat>
+      <section class="page-section">
+        <router-outlet></router-outlet>
       </section>
     </main>
   </div>

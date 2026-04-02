@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EventService } from '../event.service';
 import { Registration, RegistrationService } from '../registration';
 import { AuthService } from '../auth';
@@ -19,9 +20,6 @@ interface SortState {
   styleUrl: './event-overview.css'
 })
 export class EventOverviewComponent implements OnInit {
-
-  @Output() openChat = new EventEmitter<{ id: number; title: string }>();
-
   events: Event[] = [];
   regsByEvent = new Map<number, Registration[]>();
   sortByEvent = new Map<number, SortState>();
@@ -34,6 +32,7 @@ export class EventOverviewComponent implements OnInit {
     private eventService: EventService,
     private regService: RegistrationService,
     public auth: AuthService,
+    private router: Router,
     private zone: NgZone,
     private cdr: ChangeDetectorRef
   ) {}
@@ -183,6 +182,14 @@ export class EventOverviewComponent implements OnInit {
     return current.direction === 'asc' ? '↑' : '↓';
   }
 
+  openChat(event: Event): void {
+    if (event.id == null) return;
+
+    this.router.navigate(['/event-chat', event.id], {
+      queryParams: { title: event.title }
+    });
+  }
+
   editEvent(event: Event): void {
     const payload = {
       event,
@@ -190,7 +197,7 @@ export class EventOverviewComponent implements OnInit {
     };
 
     localStorage.setItem('editEvent', JSON.stringify(payload));
-    window.location.href = '/student-events';
+    this.router.navigate(['/events']);
   }
 
   removeRegistration(eventId: number, registration: Registration): void {
@@ -230,7 +237,7 @@ export class EventOverviewComponent implements OnInit {
     this.eventService.deleteEvent(eventId).subscribe({
       next: () => {
         alert('Event wurde gelöscht.');
-        window.location.href = '/student-events';
+        this.loadData();
       },
       error: (err) => {
         console.error('Fehler beim Löschen des Events', err);

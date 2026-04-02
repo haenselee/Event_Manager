@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { EventService } from '../event.service';
 import { Event } from '../event.model';
 
@@ -18,19 +19,18 @@ interface CalendarDay {
 })
 export class CalendarComponent implements OnInit {
 
-  @Output() goToEvents = new EventEmitter<void>();
-
   days: CalendarDay[] = [];
   monthName = '';
   year = 0;
 
-  currentMonth = 0; // 0 = Jan
+  currentMonth = 0;
   currentYear = 0;
 
   allEvents: Event[] = [];
 
   constructor(
     private eventService: EventService,
+    private router: Router,
     private zone: NgZone,
     private cdr: ChangeDetectorRef
   ) {}
@@ -67,12 +67,11 @@ export class CalendarComponent implements OnInit {
     this.monthName = new Date(year, month, 1).toLocaleString('de-AT', { month: 'long' });
 
     const firstDay = new Date(year, month, 1);
-    const startWeekday = (firstDay.getDay() + 6) % 7; // 0 = Mo, 6 = So
+    const startWeekday = (firstDay.getDay() + 6) % 7;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     const days: CalendarDay[] = [];
 
-    // Tage vor dem 1. des Monats
     for (let i = startWeekday; i > 0; i--) {
       const date = new Date(year, month, 1 - i);
       days.push({
@@ -82,7 +81,6 @@ export class CalendarComponent implements OnInit {
       });
     }
 
-    // Tage des aktuellen Monats
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(year, month, d);
       days.push({
@@ -92,7 +90,6 @@ export class CalendarComponent implements OnInit {
       });
     }
 
-    // Rest auffüllen bis volle Wochen
     while (days.length % 7 !== 0) {
       const last = days[days.length - 1].date;
       const date = new Date(
@@ -124,7 +121,7 @@ export class CalendarComponent implements OnInit {
       const date = String(day.date.getDate()).padStart(2, '0');
       const dayStr = `${year}-${month}-${date}`;
 
-      day.events = this.allEvents.filter(e => e.date === dayStr);
+      day.events = this.allEvents.filter((e) => e.date === dayStr);
     }
   }
 
@@ -153,6 +150,6 @@ export class CalendarComponent implements OnInit {
   }
 
   onEventClick(): void {
-    this.goToEvents.emit();
+    this.router.navigate(['/events']);
   }
 }

@@ -1,6 +1,7 @@
 import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth';
 
 @Component({
@@ -19,6 +20,7 @@ export class LoginComponent {
 
   constructor(
     private auth: AuthService,
+    private router: Router,
     private zone: NgZone,
     private cdr: ChangeDetectorRef
   ) {}
@@ -35,6 +37,7 @@ export class LoginComponent {
           this.errorMessage = '';
           this.password = '';
           this.cdr.detectChanges();
+          this.router.navigate(['/events']);
         });
       },
       error: (err) => {
@@ -47,6 +50,4 @@ export class LoginComponent {
       }
     });
   }
-
-
 }

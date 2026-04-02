@@ -88,7 +88,7 @@
     </div>
 
     <div class="btna">
-      <button class="chat-btn" (click)="openChat.emit({ id: ev.id!, title: ev.title })">
+      <button class="chat-btn" (click)="openChat(ev)">
         Chat-Forum
       </button>
       <button *ngIf="auth.isTeacher || auth.isAdmin" type="button" (click)="editEvent(ev)">

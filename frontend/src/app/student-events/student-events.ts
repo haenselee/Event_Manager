@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { EventService } from '../event.service';
 import { Registration, RegistrationService } from '../registration';
 import { AuthService } from '../auth';
@@ -15,8 +16,6 @@ import { Event } from '../event.model';
   styleUrl: './student-events.css'
 })
 export class StudentEventsComponent implements OnInit {
-  @Output() openChat = new EventEmitter<{ id: number; title: string }>();
-
   events: Event[] = [];
   registeredEventIds = new Set<number>();
   myRegistrations = new Map<number, Registration>();
@@ -43,6 +42,7 @@ export class StudentEventsComponent implements OnInit {
     public auth: AuthService,
     private eventService: EventService,
     private regService: RegistrationService,
+    private router: Router,
     private zone: NgZone,
     private cdr: ChangeDetectorRef
   ) {}
@@ -381,6 +381,14 @@ export class StudentEventsComponent implements OnInit {
     }
 
     return 'Abmelden';
+  }
+
+  openChat(event: Event): void {
+    if (event.id == null) return;
+
+    this.router.navigate(['/event-chat', event.id], {
+      queryParams: { title: event.title }
+    });
   }
 
   toggleRegistration(eventId?: number): void {
