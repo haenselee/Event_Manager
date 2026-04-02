@@ -66,10 +66,20 @@ export class StudentEventsComponent implements OnInit {
     this.eventService.getEvents().subscribe({
       next: (events) => {
         this.zone.run(() => {
-          this.events = events;
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          this.events = this.auth.isStudent
+            ? events.filter((event) => {
+              const eventDate = new Date(event.date);
+              eventDate.setHours(0, 0, 0, 0);
+              return eventDate.getTime() >= today.getTime();
+            })
+            : events;
+
           this.loading = false;
 
-          events.forEach((event) => {
+          this.events.forEach((event) => {
             if (event.id != null) {
               this.regService.getByEvent(event.id).subscribe({
                 next: (regs) => {

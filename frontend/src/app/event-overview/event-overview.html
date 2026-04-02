@@ -94,7 +94,12 @@
       <button *ngIf="auth.isTeacher || auth.isAdmin" type="button" (click)="editEvent(ev)">
         Event bearbeiten
       </button>
-      <button *ngIf="auth.isTeacher || auth.isAdmin" type="button" (click)="deleteEvent(ev.id)">
+      <button
+        *ngIf="auth.isTeacher || auth.isAdmin"
+        type="button"
+        (click)="deleteEvent(ev.id)"
+        [disabled]="hasAnyRegistrations(ev.id!)"
+      >
         Event löschen
       </button>
     </div>

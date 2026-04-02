@@ -153,6 +153,10 @@ export class EventOverviewComponent implements OnInit {
     return this.getPaidCount(eventId) > 0;
   }
 
+  hasAnyRegistrations(eventId: number): boolean {
+    return this.getRegisteredCount(eventId) > 0;
+  }
+
   setSort(eventId: number, column: 'student' | 'registeredAt' | 'paid'): void {
     const current = this.sortByEvent.get(eventId);
 
@@ -218,6 +222,11 @@ export class EventOverviewComponent implements OnInit {
     if (!this.auth.isTeacher && !this.auth.isAdmin) return;
     if (eventId == null) return;
 
+    if (this.hasAnyRegistrations(eventId)) {
+      alert('Das Event kann nicht gelöscht werden, weil bereits Schüler angemeldet sind.');
+      return;
+    }
+
     this.eventService.deleteEvent(eventId).subscribe({
       next: () => {
         alert('Event wurde gelöscht.');
@@ -225,7 +234,7 @@ export class EventOverviewComponent implements OnInit {
       },
       error: (err) => {
         console.error('Fehler beim Löschen des Events', err);
-        alert('Fehler beim Löschen des Events.');
+        alert(err?.error?.message ?? err?.error ?? 'Fehler beim Löschen des Events.');
       }
     });
   }

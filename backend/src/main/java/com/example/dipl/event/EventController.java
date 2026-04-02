@@ -84,8 +84,15 @@ public class EventController {
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         Event event = eventRepo.findById(id).orElseThrow();
 
+        long registrationCount = regRepo.countByEvent_Id(id);
+        if (registrationCount > 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Das Event kann nicht gelöscht werden, weil bereits Schüler angemeldet sind"
+            );
+        }
+
         messageRepo.deleteByEvent_Id(id);
-        regRepo.deleteByEvent_Id(id);
         eventRepo.delete(event);
 
         return ResponseEntity.noContent().build();
